@@ -30,13 +30,17 @@ A full-stack web application for managing the PKP Lamandau site. Built using **L
 ```bash
 git clone https://github.com/LinzYoi/Website-PKP-Lamandau.git
 cd Website-PKP-Lamandau
+```
 
-Install backend dependencies, setup, run server
+### 📂 Install backend dependencies, setup, run server
+```bash
 composer install
 php artisan storage:link
 php artisan serve
+```
 
-Install frontend dependencies & run server
+### 📂 Install frontend dependencies & run server
+```bash
 npm install
 npm run dev
-
+```
