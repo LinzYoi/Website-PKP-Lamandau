@@ -8,7 +8,7 @@ A full-stack web application for managing the PKP Lamandau site. Built using **L
 
 - 🔧 **Backend**: Laravel
 - 🎨 **Frontend**: Vue.js (Vite)
-- 💾 **Database**: MySQL / MariaDB
+- 💾 **Database**: MySQL
 - 🖼️ **Storage**: Laravel public storage for media
 
 ---
