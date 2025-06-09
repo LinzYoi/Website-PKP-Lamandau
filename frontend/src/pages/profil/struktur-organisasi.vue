@@ -8,35 +8,15 @@
           <v-row align="center" justify="center">
             <v-col cols="10">
               <p class="text-h5 text-md-h3 font-weight-bold text-center mb-10">
-                Galeri
+                Struktur Organisasi
               </p>
 
-              <v-row                
-                align="center"
-                justify="start"
-              >                
-                <v-col 
-                  v-for="galeri in galeriStore.galeris"
-                  :key="galeri.id"
-                  cols="12" 
-                  sm="6"
-                  md="4"
-                  class=""
-                >
-                  <v-card
-                    :elevation="0"
-                    color="bg-transparent"
-                    rounded="xl"
-                    class="d-flex flex-column justify-space-between"
-                  >
-                    <v-img
-                      :src="`${baseUrl}/storage/${galeri.file_gambar_media}`"
-                      height="200"
-                      cover
-                    ></v-img>
-                  </v-card>
-                </v-col>
-              </v-row>
+              <v-img                        
+                :src="`${baseUrl}/storage/` + strukturOrganisasiStore.strukturOrganisasis[0]?.file_gambar_struktur_organisasi"
+                width="100%"
+                height="auto"
+                cover
+            ></v-img>              
             </v-col>
           </v-row>
         </v-container>
@@ -94,13 +74,13 @@
 import NavigationBeranda from "@/components/NavigationBeranda.vue";
 import { computed, onMounted, ref } from "vue";
 
-import config from "../../config";
+import config from "../../../config";
 const apiBaseUrl = config.apiBaseUrl;
 const baseUrl = config.baseUrl;
 
-import { useGaleriStore } from "@/stores/galeri";
+import { useStrukturOrganisasiStore } from "@/stores/strukturOrganisasi";
+const strukturOrganisasiStore = useStrukturOrganisasiStore();
 
-const galeriStore = useGaleriStore();
 const search = ref("");
 
 // const berandas = computed(() => berandaStore.berandas);
@@ -125,8 +105,9 @@ const profilItems = ref([
   { title: "Profil Pegawai", to: "/profil/profil-pegawai" },
 ]);
 
-onMounted(() => {
-  galeriStore.getAllGaleris();
+onMounted(async() => {  
+  await strukturOrganisasiStore.getAllStrukturOrganisasis();
+  console.log(strukturOrganisasiStore.getAllStrukturOrganisasis())
 });
 </script>
 

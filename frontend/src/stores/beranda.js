@@ -17,12 +17,9 @@ export const useBerandaStore = defineStore("beranda", {
     clearBerandas() {
       this.berandas = [];
     },
-    async getAllBerandas() {
-      return axios
+    getAllBerandas() {
+      axios
         .get(apiBaseUrl + "/get-all-berandas", {
-          headers: {
-            Authorization: `Bearer ${Cookies.get("auth_token")}`,
-          },
         })
         .then((response) => {          
           this.setBerandas(response.data.data);

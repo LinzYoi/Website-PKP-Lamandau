@@ -17,8 +17,8 @@ export const useLayananStore = defineStore("layanan", {
     clearLayanans() {
       this.layanans = [];
     },
-    async getAllLayanans() {
-      return axios
+    getAllLayanans() {
+      axios
         .get(apiBaseUrl + "/get-all-layanans", {
           headers: {
             Authorization: `Bearer ${Cookies.get("auth_token")}`,

@@ -7,7 +7,7 @@
           prepend-icon="mdi-plus"
           color="green"
           rounded="xl"
-          text="Tambah Data Pegawai"
+          text="Tambah Data Produk Hukum"
           @click="openDialog('tambah', {}, addHandler)"
         ></v-btn>
       </v-col>
@@ -30,7 +30,7 @@
     <v-card class="pe-8" tile elevation="0">
       <v-data-table
         :headers="headers"
-        :items="pegawais"
+        :items="produkHukums"
         :search="search"
         :loading="loadingTable"
         loading-text="Loading..."
@@ -38,11 +38,49 @@
         <template v-slot:item.no="{ index }">
           {{ index + 1 }}
         </template>
-        <template v-slot:item.file_pegawai="{ item }">
-          <img
-            :src="`${baseUrl}/storage/${item.file_pegawai}`"
-            style="width: auto; max-height: 100px"
-          />
+        <template v-slot:item.file_dokumen_produk_hukum="{ item }">
+          <a
+            :href="`${baseUrl}/storage/${item.file_dokumen_produk_hukum}`"
+            target="_blank"
+            class="text-decoration-none"
+          >
+            <v-icon
+              v-if="item.file_dokumen_produk_hukum.split('.').pop() === 'zip'"
+              size="30"
+              color="yellow-darken-3"
+              >mdi-folder-zip</v-icon
+            >
+            <v-icon
+              v-else-if="
+                item.file_dokumen_produk_hukum.split('.').pop() === 'pdf'
+              "
+              size="30"
+              color="red-darken-2"
+              >mdi-file-pdf-box</v-icon
+            >
+            <v-icon
+              v-else-if="
+                item.file_dokumen_produk_hukum.split('.').pop() === 'doc'
+              "
+              size="30"
+              color="blue-darken-3"
+              >mdi-file-word</v-icon
+            >
+            <v-icon
+              v-else-if="
+                item.file_dokumen_produk_hukum.split('.').pop() === 'docx'
+              "
+              size="30"
+              color="blue-darken-3"
+              >mdi-file-word</v-icon
+            >
+            <br />
+            <span
+              class="text-caption font-weight-regular text-decoration-underline text-grey-darken-3"
+            >
+              Unduh disini
+            </span>
+          </a>
         </template>
         <template v-slot:item.actions="{ item }">
           <v-btn
@@ -75,12 +113,12 @@
         <div class="text-h5 font-weight-medium raleway-font ps-2">
           {{
             dialogAction === "tambah"
-              ? "Tambah Pegawai"
+              ? "Tambah Produk Hukum"
               : dialogAction === "sunting"
-              ? "Sunting Pegawai"
-              : "Hapus Pegawai"
+              ? "Sunting Produk Hukum"
+              : "Hapus Produk Hukum"
           }}
-          {{ suntingNama }}
+          {{ suntingJudulProdukHukum }}
         </div>
       </v-card-title>
       <v-card-text class="py-3" v-if="dialogAction !== 'hapus'">
@@ -88,44 +126,53 @@
           <v-row>
             <v-col cols="12">
               <v-text-field
-                v-model="form.nama"
-                label="Nama"
+                v-model="form.bentuk_produk_hukum"
+                label="Bentuk"
                 variant="outlined"
                 rounded="xl"
               ></v-text-field>
             </v-col>
             <v-col cols="12">
               <v-text-field
-                v-model="form.jabatan"
-                label="Jabatan"
-                variant="outlined"
-                rounded="xl"
-              ></v-text-field>
-            </v-col>
-            <v-col cols="12">
-              <v-text-field
-                v-model="form.nip"
-                label="NIP"
+                v-model="form.judul_produk_hukum"
+                label="Judul"
                 variant="outlined"
                 rounded="xl"
               ></v-text-field>
             </v-col>
             <v-col cols="12">
               <v-select
-                v-model="form.status"
-                :items="['Aktif', 'Mutasi', 'Pensiun']"
-                label="Status"
+                v-model="form.tahun_produk_hukum"
+                label="Tahun"
                 variant="outlined"
                 rounded="xl"
+                :items="[
+                  '2015',
+                  '2016',
+                  '2017',
+                  '2018',
+                  '2019',
+                  '2020',
+                  '2021',
+                  '2022',
+                  '2023',
+                  '2024',
+                  '2025',
+                  '2026',
+                  '2027',
+                  '2028',
+                  '2029',
+                  '2030',
+                ]"
               ></v-select>
             </v-col>
             <v-col cols="12">
               <v-file-input
-                v-model="form.file_pegawai"
-                label="Foto"
+                v-model="form.file_dokumen_produk_hukum"
+                label="Dokumen (.zip, .pdf, .doc, .docx)"
                 variant="outlined"
                 rounded="xl"
-                accept=".jpg, .jpeg, .png"
+                accept=".zip, .pdf, .doc, .docx"
                 prepend-icon=""
                 append-inner-icon="mdi-paperclip"
               ></v-file-input>
@@ -135,7 +182,7 @@
       </v-card-text>
       <v-card-text class="py-3" v-else>
         <div class="text-h7 font-weight-regular ps-1">
-          Apakah ingin hapus pegawai ini?
+          Apakah ingin hapus produk hukum ini?
         </div>
       </v-card-text>
       <v-card-actions class="text-center" align="center" justify="center">
@@ -143,19 +190,19 @@
         <v-btn
           v-if="dialogAction == 'tambah'"
           size="small"
-          @click="tambahPegawai()"
+          @click="tambahProdukHukum()"
           >Ya</v-btn
         >
         <v-btn
           v-if="dialogAction == 'sunting'"
           size="small"
-          @click="suntingPegawai()"
+          @click="suntingProdukHukum()"
           >Ya</v-btn
         >
         <v-btn
           v-if="dialogAction == 'hapus'"
           size="small"
-          @click="hapusPegawai()"
+          @click="hapusProdukHukum()"
           >Ya</v-btn
         >
       </v-card-actions>
@@ -170,17 +217,17 @@ import { useToast } from "vue-toastification";
 import axios from "axios";
 import Cookies from "js-cookie";
 
-import config from "../../config";
+import config from "../../../config";
 const apiBaseUrl = config.apiBaseUrl;
 const baseUrl = config.baseUrl;
 
 import { useUserStore } from "@/stores/user";
-import { usePegawaiStore } from "@/stores/pegawai";
+import { useProdukHukumStore } from "@/stores/produkHukum";
 
-const pegawaiStore = usePegawaiStore();
+const produkHukumStore = useProdukHukumStore();
 const userStore = useUserStore();
 
-const pegawais = computed(() => pegawaiStore.pegawais);
+const produkHukums = computed(() => produkHukumStore.produkHukums);
 
 const search = ref("");
 const loadingTable = ref(false);
@@ -188,23 +235,22 @@ const dialog = ref(false);
 const dialogAction = ref("");
 const dialogActionHandler = ref(null);
 
-const suntingNama = ref("");
+const suntingJudulProdukHukum = ref("");
 const form = ref({});
 
 const headers = ref([
   { title: "No", value: "no" },
-  { title: "Nama", value: "nama", sortable: true },
-  { title: "Jabatan", value: "jabatan", sortable: true },
-  { title: "NIP", value: "nip", sortable: true },
-  { title: "Status", value: "status", sortable: true },
-  { title: "Foto", value: "file_pegawai" },
+  { title: "Bentuk", value: "bentuk_produk_hukum", sortable: true },
+  { title: "Judul", value: "judul_produk_hukum", sortable: true },
+  { title: "Tahun", value: "tahun_produk_hukum", sortable: true },
+  { title: "Dokumen", value: "file_dokumen_produk_hukum" },
   { title: "Aksi", value: "actions", sortable: false },
 ]);
 
 const openDialog = (action, item, handler) => {
   form.value = { ...item };
-  form.value.file_pegawai = null;
-  suntingNama.value = item.nama;
+  form.value.file_dokumen_produk_hukum = null;
+  suntingJudulProdukHukum.value = item.judul_produk_hukum;
 
   dialogAction.value = action;
   dialogActionHandler.value = handler;
@@ -212,18 +258,18 @@ const openDialog = (action, item, handler) => {
   dialog.value = true;
 };
 
-const tambahPegawai = () => {
+const tambahProdukHukum = () => {
   loadingTable.value = true;
 
   axios
-    .post(apiBaseUrl + "/tambah-pegawai", form.value, {
+    .post(apiBaseUrl + "/tambah-produk-hukum", form.value, {
       headers: {
         Authorization: `Bearer ${Cookies.get("auth_token")}`,
         "Content-Type": "multipart/form-data",
       },
     })
     .then((response) => {
-      pegawaiStore.getAllpegawais();
+      produkHukumStore.getAllProdukHukums();
       dialog.value = false;
       useToast().success(response.data.message);
     })
@@ -238,12 +284,12 @@ const tambahPegawai = () => {
     });
 };
 
-const suntingPegawai = () => {
+const suntingProdukHukum = () => {
   loadingTable.value = true;
 
   axios
     .post(
-      apiBaseUrl + "/sunting-pegawai/" + form.value.id_pegawai,
+      apiBaseUrl + "/sunting-produk-hukum/" + form.value.id_produk_hukum,
       form.value,
       {
         headers: {
@@ -253,7 +299,7 @@ const suntingPegawai = () => {
       }
     )
     .then((response) => {
-      pegawaiStore.getAllpegawais();
+      produkHukumStore.getAllProdukHukums();
       dialog.value = false;
       useToast().success(response.data.message);
     })
@@ -268,17 +314,17 @@ const suntingPegawai = () => {
     });
 };
 
-const hapusPegawai = () => {
+const hapusProdukHukum = () => {
   loadingTable.value = true;
 
   axios
-    .delete(apiBaseUrl + "/hapus-pegawai/" + form.value.id_pegawai, {
+    .delete(apiBaseUrl + "/hapus-produk-hukum/" + form.value.id_produk_hukum, {
       headers: {
         Authorization: `Bearer ${Cookies.get("auth_token")}`,
       },
     })
     .then((response) => {
-      pegawaiStore.getAllpegawais();
+      produkHukumStore.getAllProdukHukums();
       dialog.value = false;
       useToast().success(response.data.message);
     })
@@ -295,7 +341,7 @@ const hapusPegawai = () => {
 
 onMounted(() => {
   (async () => {
-    await pegawaiStore.getAllpegawais();
+    await produkHukumStore.getAllProdukHukums();
   })();
 });
 </script>

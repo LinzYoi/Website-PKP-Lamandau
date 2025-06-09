@@ -8,33 +8,23 @@
           <v-row align="center" justify="center">
             <v-col cols="10">
               <p class="text-h5 text-md-h3 font-weight-bold text-center mb-10">
-                Galeri
+                Tentang PKP
               </p>
-
-              <v-row                
-                align="center"
-                justify="start"
-              >                
-                <v-col 
-                  v-for="galeri in galeriStore.galeris"
-                  :key="galeri.id"
-                  cols="12" 
-                  sm="6"
-                  md="4"
-                  class=""
-                >
-                  <v-card
-                    :elevation="0"
-                    color="bg-transparent"
-                    rounded="xl"
-                    class="d-flex flex-column justify-space-between"
-                  >
-                    <v-img
-                      :src="`${baseUrl}/storage/${galeri.file_gambar_media}`"
-                      height="200"
-                      cover
-                    ></v-img>
-                  </v-card>
+              <v-row align="center" justify="start">
+                <v-col cols="12">
+                  <p class="text-body-1 text-justify">
+                    Bidang Perumahan dan Kawasan Permukiman adalah salah satu
+                    bidang yang bertanggung jawab untuk mengelola dan
+                    mengembangkan perumahan dan kawasan permukiman yang layak,
+                    sehat, dan berkelanjutan. Bidang ini memiliki tugas untuk
+                    meningkatkan kualitas perumahan dan lingkungan permukiman,
+                    serta menyediakan fasilitas dan infrastruktur yang memadai
+                    untuk mendukung kehidupan masyarakat yang lebih baik. Dengan
+                    fokus pada pengembangan perumahan yang terjangkau dan
+                    lingkungan permukiman yang nyaman, bidang ini berupaya untuk
+                    menciptakan hunian yang ideal bagi masyarakat dan
+                    meningkatkan kualitas hidup mereka
+                  </p>
                 </v-col>
               </v-row>
             </v-col>
@@ -94,13 +84,6 @@
 import NavigationBeranda from "@/components/NavigationBeranda.vue";
 import { computed, onMounted, ref } from "vue";
 
-import config from "../../config";
-const apiBaseUrl = config.apiBaseUrl;
-const baseUrl = config.baseUrl;
-
-import { useGaleriStore } from "@/stores/galeri";
-
-const galeriStore = useGaleriStore();
 const search = ref("");
 
 // const berandas = computed(() => berandaStore.berandas);
@@ -113,7 +96,7 @@ const formattedDate = (date) => {
     year: "numeric",
     month: "long",
     day: "numeric",
-  }
+  };
   return new Date(date).toLocaleDateString("id-ID", options);
 };
 
@@ -125,9 +108,7 @@ const profilItems = ref([
   { title: "Profil Pegawai", to: "/profil/profil-pegawai" },
 ]);
 
-onMounted(() => {
-  galeriStore.getAllGaleris();
-});
+onMounted(() => {});
 </script>
 
 <style scoped></style>

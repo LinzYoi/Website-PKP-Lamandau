@@ -20,9 +20,6 @@ export const useStrukturOrganisasiStore = defineStore("strukturOrganisasi", {
     async getAllStrukturOrganisasis() {
       return axios
         .get(apiBaseUrl + "/get-all-struktur-organisasis", {
-          headers: {
-            Authorization: `Bearer ${Cookies.get("auth_token")}`,
-          },
         })
         .then((response) => {          
           this.setStrukturOrganisasis(response.data.data);

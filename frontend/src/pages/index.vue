@@ -3,7 +3,7 @@
 </template>
 
 <script setup>
-import welcome from '@/pages/welcome.vue';
+import welcome from '@/pages/beranda.vue';
 
   //
 </script>

@@ -9,7 +9,6 @@ import vuetify from './vuetify'
 import pinia from '@/stores'
 import router from '@/router'
 import gsap from 'gsap'
-import './pusher'
 
 import Toast from "vue-toastification";
 import "vue-toastification/dist/index.css";

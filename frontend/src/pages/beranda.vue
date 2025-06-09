@@ -1,210 +1,219 @@
 <template>
-  <v-container fluid class="py-2 px-0" style="margin-top: 80px">
-    <v-row class="pe-8" align="center" justify="center">
-      <v-col cols="8" class="d-flex align-center">
-      </v-col>
-      <v-col cols="4" class="d-flex align-center justify-end">
-        <v-text-field
-          style="border-radius: 50px"
-          class="bg-grey-lighten-3"
-          v-model="search"
-          label="Cari"
-          prepend-inner-icon="mdi-magnify"
-          variant="outlined"
-          density="compact"
-          rounded="xl"
-          hide-details
-          single-line
-        ></v-text-field>
-      </v-col>
-    </v-row>
-
-    <v-card class="pe-8" tile elevation="0">
-      <v-data-table
-        :headers="headers"
-        :items="berandas"
-        :search="search"
-        :loading="loadingTable"
-        loading-text="Loading..."
+  <v-responsive>
+    <v-app>      
+      <NavigationBeranda />
+      <v-main
+        :style="$vuetify.display.lgAndUp ? 'margin-top: 280px' : 'margin-top: 180px'"
       >
-        <template v-slot:item.no="{ index }">
-          {{ index + 1 }}
-        </template>
-        <template v-slot:item.file_beranda="{ item }">
-          <div v-if="item.file_beranda">
-            <img
-              v-if="isImage(item.file_beranda)"
-              :src="`${baseUrl}/storage/${item.file_beranda}`"
-              style="width: auto; max-height: 100px"
-            />
-            <video
-              v-else
-              :src="`${baseUrl}/storage/${item.file_beranda}`"
-              style="max-width: 200px; max-height: 100px"
-              controls              
-            ></video>            
-          </div>
-        </template>
-        <template v-slot:item.actions="{ item }">
-          <v-btn
-            class="text-none"
-            variant="flat"
-            color="yellow"
-            rounded="xl"
-            size="x-small"
-            text="Sunting"
-            @click="openDialog('sunting', item, editHandler)"
-          ></v-btn>
-        </template>
-      </v-data-table>
-    </v-card>
-  </v-container>
+        <v-container fluid>
+          <v-row align="center" justify="center">
+            <v-col cols="10">
+              <!-- <pre>{{ berandaStore.berandas }}</pre> -->
+              <video
+                :src="`${baseUrl}/storage/` + berandaStore.berandas[0]?.file_beranda"
+                autoplay
+                loop
+                muted
+                width="100%"
+                height="auto"
+              ></video>
+            </v-col>
 
-  <!-- dialog add, edit, delete -->
-  <v-dialog v-model="dialog" max-width="600" persistent>
-    <v-card class="py-3" rounded="xl">
-      <v-card-title class="d-flex justify-space-between align-center">
-        <div class="text-h5 font-weight-medium raleway-font ps-2">
-          Sunting Beranda No {{ form.id_beranda }}
-        </div>
-      </v-card-title>
-      <v-card-text class="py-3" v-if="dialogAction !== 'hapus'">
-        <v-form @submit.prevent>
-          <v-row>
-            <v-col cols="12">
-              <v-text-field
-                v-model="form.judul_beranda"
-                label="Judul"
-                variant="outlined"
-                rounded="xl"
-              ></v-text-field>
+            <v-col cols="10" class="text-center card-hover" style="margin-top: 120px;">
+              <p class="text-h5 text-md-h4 font-weight-bold mb-4">{{ berandaStore.berandas[1]?.judul_beranda }}</p>
+
+              <div class="d-flex align-center justify-center">
+                <v-img
+                  v-if="berandaStore.berandas[2]?.file_beranda"
+                  :src="`${baseUrl}/storage/` + berandaStore.berandas[1]?.file_beranda"
+                  width="auto"
+                  height="550"
+                  contain
+                ></v-img>
+              </div>
             </v-col>
-            <v-col cols="12">
-              <v-textarea
-                v-model="form.deskripsi_beranda"
-                label="Deskripsi"
-                variant="outlined"
-                rounded="xl"
-                rows="3"
-              ></v-textarea>
+
+            <v-col cols="10" style="margin-top: 120px;">
+              <v-row align="center">
+                <v-col cols="5" class="card-hover">
+                  <v-img
+                    v-if="berandaStore.berandas[2]?.file_beranda"
+                    :src="`${baseUrl}/storage/` + berandaStore.berandas[2]?.file_beranda"
+                    cover                  
+                  ></v-img>                  
+                </v-col>
+                <v-col cols="7">
+                  <p class="text-h6 text-md-h4 font-weight-bold mb-4">{{ berandaStore.berandas[2]?.judul_beranda }}</p>
+                  <p class="text-md-body-1 text-justify">{{ berandaStore.berandas[2]?.deskripsi_beranda }}</p>
+                </v-col>
+              </v-row>
             </v-col>
-            <v-col cols="12">
-              <v-text-field
-                v-model="form.nama"
-                label="Nama"
-                variant="outlined"
-                rounded="xl"                                
-              ></v-text-field>
-            </v-col>            
-            <v-col cols="12">
-              <v-file-input
-                v-model="form.file_beranda"
-                label="Gambar/Video Beranda"
-                variant="outlined"
-                rounded="xl"
-                accept=".jpg, .jpeg, .png, .mp4, .mov"
-                prepend-icon=""
-                append-inner-icon="mdi-paperclip"
-              ></v-file-input>
+
+            <v-col cols="10" style="margin-top: 120px;">
+              <v-row align="center">
+                <v-col cols="7" class="">
+                  <p class="text-h6 text-md-h4 font-weight-bold mb-4">{{ berandaStore.berandas[3]?.judul_beranda }}</p>
+                  <p class="text-md-body-1 text-justify mb-4">{{ berandaStore.berandas[3]?.deskripsi_beranda }}</p>
+                  <p class="text-h6 text-md-h5 font-weight-bold">{{ berandaStore.berandas[3]?.nama }}</p>
+                </v-col>
+                <v-col cols="5" class="card-hover">
+                  <v-img
+                    v-if="berandaStore.berandas[3]?.file_beranda"
+                    :src="`${baseUrl}/storage/` + berandaStore.berandas[3]?.file_beranda"                                        
+                    cover
+                  ></v-img>
+                </v-col>
+              </v-row>
+            </v-col>
+
+            <v-col cols="10" style="margin-top: 120px;">
+              <p class="text-h5 text-md-h3 font-weight-bold text-center mb-16">Berita</p>
+              <v-row align="center">
+                <v-col
+                  v-for="beritas in beritaStore.beritas"
+                  :key="beritas.id"
+                  cols="12"
+                  sm="6"
+                  md="4"
+                >
+                  <v-card
+                    color="grey-lighten-3"
+                    rounded="lg"
+                    elevation="8"
+                    min-height="470"
+                    class="d-flex flex-column justify-space-between"
+                    style="height: 100%;"
+                  >
+                    <v-img
+                      :src="`${baseUrl}/storage/${beritas.file_gambar_berita}`"
+                      height="300"
+                      cover
+                    ></v-img>
+
+                    <div class="px-4 pt-2">
+                      <p class="text-h6 font-weight-bold">
+                        {{ beritas.judul_berita }}
+                      </p>
+                      <p class="text-md-body-1">
+                        {{ beritas.deskripsi_berita }}
+                      </p>
+                    </div>
+
+                    <div class="flex-grow-1"></div> <!-- Spacer agar tombol selalu ke bawah -->
+
+                    <div class="px-4 pb-4 mt-8 d-flex justify-end">
+                      <v-btn                        
+                        variant="text"
+                        rounded="lg"
+                        class="text-md-body-1 font-weight-bold bg-white btn-hover"
+                        @click="goToDetail(beritas)"
+                      >
+                        Selengkapnya
+                      </v-btn>
+                    </div>
+                  </v-card>
+                </v-col>
+              </v-row>
+            </v-col>
+
+            <v-col cols="10" style="margin-top: 120px;">
+              <p class="text-h5 text-md-h3 font-weight-bold text-center mb-16">Galeri</p>
+              <v-row align="center">
+                <v-col
+                  v-for="galeris in galeriStore.galeris"
+                  :key="galeris.id"
+                  cols="12"
+                  sm="6"
+                  md="4"
+                >
+                  <v-card                                         
+                    rounded="xl"
+                    elevation="0"
+                    height="250"
+                    class="d-flex flex-column justify-space-between card-hover"                    
+                  >
+                    <v-img
+                      :src="`${baseUrl}/storage/${galeris.file_gambar_media}`"
+                      height="auto"
+                      cover
+                    ></v-img>
+                  </v-card>
+                </v-col>
+              </v-row>
             </v-col>
           </v-row>
-        </v-form>
-      </v-card-text>
-      <v-card-actions class="text-center" align="center" justify="center">
-        <v-btn size="small" @click="dialog = false">Tidak</v-btn>
-        <v-btn
-          v-if="dialogAction == 'sunting'"
-          size="small"
-          @click="suntingBeranda()"
-          >Ya</v-btn>
-      </v-card-actions>
-    </v-card>
-  </v-dialog>
+        </v-container>
+      </v-main>
+
+      <v-footer class="text-center d-flex flex-column py-16 px-16" color="#FFD95F" style="margin-top: 110px;">
+        <v-row align="center" justify="center">
+          <v-col cols="5" class="d-flex align-center pe-12">
+            <!-- gambar -->
+            <v-img
+              src="/logo_pkp_lamandau.png"
+              width="50"
+              height="auto"              
+            ></v-img>
+            <p class="ms-4 text-body-1 text-justify font-weight-bold">Bidang Perumahan dan Kawasan Permukiman (PKP) Dinas PUPR PERKIMTAN Kabupaten Lamandau</p>
+          </v-col>
+          <v-col cols="5" class="ps-12">            
+            <p class="text-body-1 font-weight-medium text-justify">
+              RC7M+P9V, Komplek Perkantoran PEMDA Bukit Hibul, Prov., Nanga Bulik, Kec. Bulik, Kabupaten Lamandau, Kalimantan Tengah 74161
+              Telp : 0281 122143147931
+            </p>
+          </v-col>
+        </v-row>
+
+        <div class="mt-14">
+          <span class="text-caption">Copyright © Bidang Perumahan dan Kawasan Permukiman (PKP) Dinas PUPR PERKIMTAN Kabupaten Lamandau 2025</span>
+        </div>
+      </v-footer>
+    </v-app>
+  </v-responsive>
 </template>
 
 <script setup>
-import { onMounted, ref, computed } from "vue";
-import { useToast } from "vue-toastification";
-
-import axios from "axios";
-import Cookies from "js-cookie";
+import NavigationBeranda from '@/components/NavigationBeranda.vue';
+import { computed, onMounted, ref } from 'vue';
+import { useRouter } from 'vue-router';
 
 import config from "../../config";
 const apiBaseUrl = config.apiBaseUrl;
 const baseUrl = config.baseUrl;
 
-import { useUserStore } from "@/stores/user";
-import { useBerandaStore } from "@/stores/beranda";
+import { useBerandaStore } from '@/stores/beranda';
+import { useBeritaStore } from '@/stores/berita';
+import { useGaleriStore } from '@/stores/galeri';
 
+const router = useRouter();
 const berandaStore = useBerandaStore();
-const userStore = useUserStore();
+const beritaStore = useBeritaStore();
+const galeriStore = useGaleriStore();
 
-const berandas = computed(() => berandaStore.berandas);
-
-const search = ref("");
-const loadingTable = ref(false);
-const dialog = ref(false);
-const dialogAction = ref("");
-const dialogActionHandler = ref(null);
-
-const form = ref({});
-
-const headers = ref([
-  { title: "No", value: "no" },
-  { title: "Judul Beranda", value: "judul_beranda", sortable: true },
-  { title: "Deskripsi Beranda", value: "deskripsi_beranda", sortable: true },
-  { title: "Nama", value: "nama", sortable: true },  
-  { title: "Gambar/Video Beranda", value: "file_beranda" },
-  { title: "Aksi", value: "actions", sortable: false },
-]);
-
-const openDialog = (action, item, handler) => {
-  form.value = { ...item };
-  form.value.file_beranda = null;
-
-  dialogAction.value = action;
-  dialogActionHandler.value = handler;
-
-  dialog.value = true;
+const slugify = (text) => {
+  return text
+    .toString()
+    .toLowerCase()
+    .trim()
+    .replace(/\s+/g, '-')        // spasi → dash
+    .replace(/[^\w\-]+/g, '')    // hilangkan karakter non-word
+    .replace(/\-\-+/g, '-')      // ganti multiple dash jadi satu
+    .replace(/^-+/, '')          // hapus dash di awal
+    .replace(/-+$/, '');         // hapus dash di akhir
 };
 
-const suntingBeranda = () => {
-  loadingTable.value = true;
-
-  axios
-    .post(apiBaseUrl + "/sunting-beranda/" + form.value.id_beranda, form.value, {
-      headers: {
-        Authorization: `Bearer ${Cookies.get("auth_token")}`,
-        "Content-Type": "multipart/form-data",
-      },
-    })
-    .then((response) => {
-      berandaStore.getAllBerandas();
-      dialog.value = false;
-      useToast().success(response.data.message);
-    })
-    .catch((error) => {
-      console.log(error.response.data.message);
-      useToast().error(error.response.data.message);
-    })
-    .finally(() => {
-      setTimeout(() => {
-        loadingTable.value = false;
-      }, 500);
-    });
-};
-
-const isImage = (filename) => {
-  return /\.(jpg|jpeg|png|gif)$/i.test(filename);
-};
-
-const isVideo = (filename) => {
-  return /\.(mp4|mov)$/i.test(filename);
+const goToDetail = (berita) => {
+  const slug = slugify(berita.judul_berita);
+  router.push(`/berita/${slug}`);
 };
 
 onMounted(() => {
-  (async () => {
-    await berandaStore.getAllBerandas();
-  })();
+  berandaStore.getAllBerandas();
+  beritaStore.getAllBeritas();
+  galeriStore.getAllGaleris();
 });
 </script>
+
+<style scoped>
+
+</style>

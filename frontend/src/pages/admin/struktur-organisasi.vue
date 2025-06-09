@@ -1,8 +1,7 @@
 <template>
   <v-container fluid class="py-2 px-0" style="margin-top: 80px">
     <v-row class="pe-8" align="center" justify="center">
-      <v-col cols="8" class="d-flex align-center">
-      </v-col>
+      <v-col cols="8" class="d-flex align-center"> </v-col>
       <v-col cols="4" class="d-flex align-center justify-end">
         <v-text-field
           style="border-radius: 50px"
@@ -62,7 +61,7 @@
               : dialogAction === "sunting"
               ? "Sunting Struktur Organisasi"
               : "Hapus StrukturOrganisasi"
-          }}          
+          }}
         </div>
       </v-card-title>
       <v-card-text class="py-3" v-if="dialogAction !== 'hapus'">
@@ -102,7 +101,7 @@ import { useToast } from "vue-toastification";
 import axios from "axios";
 import Cookies from "js-cookie";
 
-import config from "../../config";
+import config from "../../../config";
 const apiBaseUrl = config.apiBaseUrl;
 const baseUrl = config.baseUrl;
 
@@ -112,7 +111,9 @@ import { useStrukturOrganisasiStore } from "@/stores/strukturOrganisasi";
 const strukturOrganisasiStore = useStrukturOrganisasiStore();
 const userStore = useUserStore();
 
-const strukturOrganisasis = computed(() => strukturOrganisasiStore.strukturOrganisasis);
+const strukturOrganisasis = computed(
+  () => strukturOrganisasiStore.strukturOrganisasis
+);
 
 const search = ref("");
 const loadingTable = ref(false);
@@ -123,7 +124,7 @@ const dialogActionHandler = ref(null);
 const form = ref({});
 
 const headers = ref([
-  { title: "No", value: "no" },  
+  { title: "No", value: "no" },
   { title: "Gambar", value: "file_gambar_struktur_organisasi" },
   { title: "Aksi", value: "actions", sortable: false },
 ]);
@@ -142,12 +143,18 @@ const suntingStrukturOrganisasi = () => {
   loadingTable.value = true;
 
   axios
-    .post(apiBaseUrl + "/sunting-struktur-organisasi/" + form.value.id_struktur_organisasi, form.value, {
-      headers: {
-        Authorization: `Bearer ${Cookies.get("auth_token")}`,
-        "Content-Type": "multipart/form-data",
-      },
-    })
+    .post(
+      apiBaseUrl +
+        "/sunting-struktur-organisasi/" +
+        form.value.id_struktur_organisasi,
+      form.value,
+      {
+        headers: {
+          Authorization: `Bearer ${Cookies.get("auth_token")}`,
+          "Content-Type": "multipart/form-data",
+        },
+      }
+    )
     .then((response) => {
       strukturOrganisasiStore.getAllStrukturOrganisasis();
       dialog.value = false;

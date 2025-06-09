@@ -63,6 +63,16 @@ export default defineConfig({
   },
   server: {
     port: 3000,
+    proxy: {
+      // ketika di frontend kita memanggil `/storage`,
+      // sebenarnya diteruskan ke `http://localhost:8000/storage`
+      '/storage': {
+        target: 'http://localhost:8000',
+        changeOrigin: true,
+        ws: false,
+        rewrite: (path) => path.replace(/^\/storage/, '/storage')
+      }
+    }
   },
   css: {
     preprocessorOptions: {

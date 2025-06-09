@@ -20,9 +20,6 @@ export const usePegawaiStore = defineStore("pegawai", {
     async getAllpegawais() {
       return axios
         .get(apiBaseUrl + "/get-all-pegawais", {
-          headers: {
-            Authorization: `Bearer ${Cookies.get("auth_token")}`,
-          },
         })
         .then((response) => {          
           this.setpegawais(response.data.data);

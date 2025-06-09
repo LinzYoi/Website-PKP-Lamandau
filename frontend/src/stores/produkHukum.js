@@ -17,8 +17,8 @@ export const useProdukHukumStore = defineStore("produkHukum", {
     clearProdukHukums() {
       this.produkHukums = [];
     },
-    async getAllProdukHukums() {
-      return axios
+    getAllProdukHukums() {
+      axios
         .get(apiBaseUrl + "/get-all-produk-hukums", {
           headers: {
             Authorization: `Bearer ${Cookies.get("auth_token")}`,

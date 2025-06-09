@@ -8,32 +8,56 @@
           <v-row align="center" justify="center">
             <v-col cols="10">
               <p class="text-h5 text-md-h3 font-weight-bold text-center mb-10">
-                Galeri
+                Profil Pegawai
               </p>
 
-              <v-row                
-                align="center"
-                justify="start"
-              >                
-                <v-col 
-                  v-for="galeri in galeriStore.galeris"
-                  :key="galeri.id"
-                  cols="12" 
+              <!-- <v-img
+                :src="
+                  `${baseUrl}/storage/` +
+                  strukturOrganisasiStore.strukturOrganisasis[0]
+                    ?.file_gambar_struktur_organisasi
+                "
+                width="100%"
+                height="auto"
+                contain
+              ></v-img> -->
+
+              <v-row align="center" justify="start">
+                <v-col
+                  v-for="pegawais in pegawaiStore.pegawais"
+                  :key="pegawais.id"
+                  cols="12"
                   sm="6"
                   md="4"
-                  class=""
+                  :class="{
+                    'px-2': $vuetify.display.smAndDown,
+                    'px-16': $vuetify.display.mdAndUp,
+                  }"
                 >
                   <v-card
-                    :elevation="0"
-                    color="bg-transparent"
-                    rounded="xl"
-                    class="d-flex flex-column justify-space-between"
+                    color="grey-lighten-3"
+                    rounded="lg"
+                    elevation="8"
+                    min-height="470"
+                    class="d-flex flex-column justify-space-between card-hover card-hover-color"
+                    style="height: 100%"
                   >
                     <v-img
-                      :src="`${baseUrl}/storage/${galeri.file_gambar_media}`"
-                      height="200"
+                      :src="`${baseUrl}/storage/${pegawais.file_pegawai}`"
+                      height="300"
                       cover
                     ></v-img>
+
+                    <div class="px-4 pt-2">
+                      <p class="text-h6 font-weight-bold">
+                        {{ pegawais.nama }}
+                      </p>
+                      <p class="text-md-body-1">
+                        {{ pegawais.jabatan }}
+                      </p>
+                    </div>
+
+                    <div class="flex-grow-1"></div>
                   </v-card>
                 </v-col>
               </v-row>
@@ -92,15 +116,16 @@
 
 <script setup>
 import NavigationBeranda from "@/components/NavigationBeranda.vue";
+
 import { computed, onMounted, ref } from "vue";
 
-import config from "../../config";
+import config from "../../../config";
 const apiBaseUrl = config.apiBaseUrl;
 const baseUrl = config.baseUrl;
 
-import { useGaleriStore } from "@/stores/galeri";
+import { usePegawaiStore } from "@/stores/pegawai";
+const pegawaiStore = usePegawaiStore();
 
-const galeriStore = useGaleriStore();
 const search = ref("");
 
 // const berandas = computed(() => berandaStore.berandas);
@@ -113,7 +138,7 @@ const formattedDate = (date) => {
     year: "numeric",
     month: "long",
     day: "numeric",
-  }
+  };
   return new Date(date).toLocaleDateString("id-ID", options);
 };
 
@@ -125,9 +150,13 @@ const profilItems = ref([
   { title: "Profil Pegawai", to: "/profil/profil-pegawai" },
 ]);
 
-onMounted(() => {
-  galeriStore.getAllGaleris();
+onMounted(async () => {
+  await pegawaiStore.getAllpegawais();
 });
 </script>
 
-<style scoped></style>
+<style scoped>
+/* .card-hover-color:hover {
+  background-color: #ffcc00 !important;
+} */
+</style>

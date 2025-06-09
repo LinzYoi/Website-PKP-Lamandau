@@ -17,8 +17,8 @@ export const useGaleriStore = defineStore("galeri", {
     clearGaleris() {
       this.galeris = [];
     },
-    async getAllGaleris() {
-      return axios
+    getAllGaleris() {
+      axios
         .get(apiBaseUrl + "/get-all-galeris", {
           headers: {
             Authorization: `Bearer ${Cookies.get("auth_token")}`,

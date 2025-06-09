@@ -8,33 +8,40 @@
           <v-row align="center" justify="center">
             <v-col cols="10">
               <p class="text-h5 text-md-h3 font-weight-bold text-center mb-10">
-                Galeri
+                Visi & Misi
               </p>
 
-              <v-row                
-                align="center"
-                justify="start"
-              >                
-                <v-col 
-                  v-for="galeri in galeriStore.galeris"
-                  :key="galeri.id"
-                  cols="12" 
-                  sm="6"
-                  md="4"
-                  class=""
-                >
-                  <v-card
-                    :elevation="0"
-                    color="bg-transparent"
-                    rounded="xl"
-                    class="d-flex flex-column justify-space-between"
-                  >
-                    <v-img
-                      :src="`${baseUrl}/storage/${galeri.file_gambar_media}`"
-                      height="200"
-                      cover
-                    ></v-img>
-                  </v-card>
+              <v-row align="center" justify="start">
+                <v-col cols="12">
+                  <p class="text-h6 font-weight-bold">Visi</p>
+                  <v-row align="center" justify="start">
+                    <v-col cols="12" class="pb-1 pt-5">
+                      <p class="text-body-1 font-weight-regular">
+                        Mewujudkan perumahan dan kawasan permukiman yang layak, sehat, dan berkelanjutan untuk meningkatkan kualitas hidup masyarakat.
+                      </p>
+                    </v-col>
+                  </v-row>
+                </v-col>
+              </v-row>
+
+              <v-row align="center" justify="start" class="mt-16">
+                <v-col cols="12">
+                  <p class="text-h6 font-weight-bold">Misi</p>
+                  <v-row align="center" justify="start">
+                    <v-col cols="12" class="pb-1 pt-5">
+                      <div class="ms-5">
+                      <p class="text-body-1 font-weight-regular">
+                          <ol type="a" class="text-body-1 font-weight-regular">
+                            <li>Meningkatkan kualitas perumahan dan lingkungan permukiman melalui pengembangan infrastruktur yang memadai.</li>
+                            <li>Menyediakan perumahan yang terjangkau dan layak bagi masyarakat.</li>
+                            <li>Meningkatkan kesadaran dan partisipasi masyarakat dalam pengembangan perumahan dan kawasan permukiman yang berkelanjutan.</li>
+                            <li>Mengembangkan sistem pengelolaan perumahan dan kawasan permukiman yang efektif dan efisien.</li>
+                            <li>Meningkatkan kualitas lingkungan permukiman melalui pengembangan fasilitas dan infrastruktur yang memadai.</li>
+                          </ol>   
+                        </p>
+                        </div>
+                    </v-col>
+                  </v-row>
                 </v-col>
               </v-row>
             </v-col>
@@ -94,13 +101,6 @@
 import NavigationBeranda from "@/components/NavigationBeranda.vue";
 import { computed, onMounted, ref } from "vue";
 
-import config from "../../config";
-const apiBaseUrl = config.apiBaseUrl;
-const baseUrl = config.baseUrl;
-
-import { useGaleriStore } from "@/stores/galeri";
-
-const galeriStore = useGaleriStore();
 const search = ref("");
 
 // const berandas = computed(() => berandaStore.berandas);
@@ -125,9 +125,7 @@ const profilItems = ref([
   { title: "Profil Pegawai", to: "/profil/profil-pegawai" },
 ]);
 
-onMounted(() => {
-  galeriStore.getAllGaleris();
-});
+onMounted(() => {});
 </script>
 
 <style scoped></style>

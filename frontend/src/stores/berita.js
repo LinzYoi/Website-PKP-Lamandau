@@ -17,12 +17,9 @@ export const useBeritaStore = defineStore("berita", {
     clearBeritas() {
       this.beritas = [];
     },
-    async getAllBeritas() {
-      return axios
+    getAllBeritas() {
+      axios
         .get(apiBaseUrl + "/get-all-beritas", {
-          headers: {
-            Authorization: `Bearer ${Cookies.get("auth_token")}`,
-          },
         })
         .then((response) => {          
           this.setBeritas(response.data.data);
@@ -32,6 +29,21 @@ export const useBeritaStore = defineStore("berita", {
           this.clearBeritas();
         });
     },
+    getBeritaBySlug(slug) {
+      const slugify = (text) => {
+        return text
+          .toString()
+          .toLowerCase()
+          .trim()
+          .replace(/\s+/g, '-')
+          .replace(/[^\w\-]+/g, '')
+          .replace(/\-\-+/g, '-')
+          .replace(/^-+/, '')
+          .replace(/-+$/, '');
+      };
+
+      return this.beritas.find((b) => slugify(b.judul_berita) === slug) || null;
+    }
   },
   getters: {
     getBeritas: (state) => state.beritas || [],

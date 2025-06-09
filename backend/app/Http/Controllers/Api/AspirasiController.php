@@ -10,6 +10,7 @@ use Illuminate\Support\Facades\Log;
 use Illuminate\Support\Facades\Storage;
 use App\Http\Controllers\Controller;
 use Illuminate\Support\Facades\Validator;
+use Illuminate\Support\Facades\Http;
 
 
 use App\Models\User;
@@ -34,21 +35,14 @@ class AspirasiController extends Controller
     public function tambahAspirasi(Request $request)
     {
         $validator = Validator::make($request->all(), [
-            'judul_aspirasi' => 'required|string|max:255',            
+            'judul_aspirasi' => 'required|string|max:255',
             'isi_aspirasi' => 'required|string',
             'nama_pembuat' => 'required|string|max:255',
             'no_telp_pembuat' => 'required|string|max:255',
             'email_pembuat' => 'required|email|max:255',
-            'file_gambar_aspirasi' => 'required|file|mimes:jpg,jpeg,png|max:2048',
+            'file_gambar_aspirasi' => 'nullable|file|mimes:jpg,jpeg,png|max:2048',            
+            // 'g-recaptcha-response' => 'required',
         ]);
-
-        if ($request->hasFile('file_gambar_aspirasi')) {
-            if ($request->file('file_gambar_aspirasi')->getSize() > 2048 * 1024) {
-                return response()->json([
-                    'message' => 'File gambar aspirasi maksimal 2MB',
-                ], 422);
-            }
-        }
 
         if ($validator->fails()) {
             return response()->json([
@@ -57,10 +51,28 @@ class AspirasiController extends Controller
             ], 422);
         }
 
-        // Upload file
-        $gambarPath = $request->file('file_gambar_aspirasi')->store('aspirasi_files', 'public');
+        // $recaptchaToken = $request->input('g-recaptcha-response');
+        // $secretKey = '6Lf_6FcrAAAAAPoiquNu_LUVLYgDc5O6uSleJCii';
+        // $recaptchaVerifyUrl = 'https://www.google.com/recaptcha/api/siteverify';
+        // $recaptchaVerifyResponse = Http::post($recaptchaVerifyUrl, [
+        //     'secret' => $secretKey,
+        //     'response' => $recaptchaToken,
+        // ]);
 
-        // Buat Aspirasi
+        // $recaptchaBody = $recaptchaVerifyResponse->json();
+
+        // if (!isset($recaptchaBody['success']) || $recaptchaBody['success'] !== true) {
+        //     return response()->json([
+        //         'message' => 'reCAPTCHA tidak valid. Silakan cek kembali.',
+        //         'errors' => ['recaptcha' => ['Verifikasi reCAPTCHA gagal.']],
+        //     ], 422);
+        // }
+        
+        $gambarPath = null;
+        if ($request->hasFile('file_gambar_aspirasi')) {
+            $gambarPath = $request->file('file_gambar_aspirasi')->store('aspirasi_files', 'public');
+        }
+
         $aspirasi = Aspirasi::create([
             'judul_aspirasi' => $request->judul_aspirasi,
             'tanggal_aspirasi' => Carbon::now(),
@@ -76,6 +88,7 @@ class AspirasiController extends Controller
             'data' => $aspirasi,
         ], 201);
     }
+
 
     public function hapusAspirasi($id_aspirasi)
     {

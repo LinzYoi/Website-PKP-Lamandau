@@ -33,7 +33,7 @@ export const useUserStore = defineStore("user", {
         })
         .catch((error) => {
           console.error("User not logged in", error);
-          router.push("/");
+          // router.push("/");
         });
     },
 

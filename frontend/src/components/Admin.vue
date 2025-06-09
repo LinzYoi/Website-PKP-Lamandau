@@ -1,6 +1,6 @@
 <template>
-  <v-row>    
-    <v-col cols="12" md="3">
+  <v-responsive height="100%">
+    <v-app>
       <v-navigation-drawer
         v-model="drawer"
         :permanent="$vuetify.display.mdAndUp"
@@ -49,17 +49,15 @@
             title="Dasbor"
           />
 
-          <!-- Grup Navigasi dengan Sub-item -->
           <v-list-group v-model="drawerGroup">
             <template #activator="{ props }">
               <v-list-item
                 v-bind="props"
                 prepend-icon="mdi-menu"
-                title="Dasbor Utama"
+                title="Data Utama"
               />
             </template>
 
-            <!-- Sub-navigasi -->
             <v-list-item
               to="/pkp-lamandau/pengelolaan-beranda"
               title="Pengelolaan Beranda"
@@ -95,7 +93,6 @@
           </v-list-group>
         </v-list>
 
-        <!-- tombol logout -->
         <v-list class="mt-0 pt-0" v-if="$vuetify.display.smAndDown">
           <v-list-item
             class="ps-4"
@@ -103,19 +100,11 @@
             title="Keluar"
             @click="logout()"
           />
-          <!-- <v-list-item
-            class="ps-4"
-            prepend-icon="mdi-account"
-            title="Profil"
-            to="/pkp-lamandau/profil"
-          /> -->
         </v-list>
       </v-navigation-drawer>
-    </v-col>
 
-    <v-col cols="12" md="9">
       <v-app-bar color="grey-lighten-4">
-        <v-app-bar-nav-icon v-if="$vuetify.display.smAndDown" variant="text" @click.stop="drawer = !drawer" />
+        <v-app-bar-nav-icon variant="text" @click.stop="drawer = !drawer" />
 
         <v-toolbar-title>{{ currentRouteTitle }}</v-toolbar-title>
 
@@ -156,6 +145,7 @@
                   class="px-2"
                   prepend-icon="mdi-logout"
                   title="Keluar"
+                  @click="logout()"
                 />
               </v-list>
             </v-card>
@@ -163,18 +153,35 @@
         </div>
       </v-app-bar>
 
-      <v-main class="pa-0 ms-6">
-        <router-view></router-view>
+      <v-main class="pt-0">
+        <v-container fluid>
+          <router-view></router-view>
+        </v-container>
       </v-main>
+    </v-app>
+  </v-responsive>
+
+  <!-- <v-row>    
+    <v-col cols="12" md="3">
+      
     </v-col>
-  </v-row>
+
+    <v-col cols="12" md="9">
+      
+
+      
+    </v-col>
+  </v-row> -->
 </template>
 
 <script setup>
+import router from "@/router";
 import { useUserStore } from "@/stores/user";
 import { ref, computed } from "vue";
 import { useRoute } from "vue-router";
+import { useToast } from "vue-toastification";
 
+import Cookies from "js-cookie";
 // Variabel untuk kontrol drawer group
 const drawer = ref(true); // default true untuk desktop
 const drawerGroup = ref(false); // kontrol untuk open/close grup menu
@@ -207,4 +214,15 @@ const currentRouteTitle = computed(() => {
       return "Pengelolaan Beranda";
   }
 });
+
+const logout = async () => {
+  Cookies.remove("auth_token");
+  router.push("/");  
+  useToast().success("Berhasil keluar");
+  
+  await new Promise(resolve => setTimeout(resolve, 1000));
+  window.location.reload(); 
+
+  await new Promise(resolve => setTimeout(resolve, 3000));
+};
 </script>

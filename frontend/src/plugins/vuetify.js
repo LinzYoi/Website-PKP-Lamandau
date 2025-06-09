@@ -32,15 +32,15 @@ export default createVuetify({
       dark: {
         colors: {
           primary: '#121212',
-          secondary: '#424242',
-          accent: '#82B1FF',
-          error: '#FF5252',
-          info: '#2196F3',
+          secondary: '#1E1E1E',
+          accent: '#BB86FC',
+          error: '#CF6679',
+          info: '#03A9F4',
           success: '#4CAF50',
-          warning: '#FFC107'
+          warning: '#FF9800'
         }
       }
-    }    
+    }
   },
   components: {
     VDateInput,

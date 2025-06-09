@@ -17,6 +17,7 @@
     "laravel-echo": "^2.0.2",
     "lodash-es": "^4.17.21",
     "md5": "^2.3.0",
+    "pdfmake": "^0.2.20",
     "pinia-plugin-persistedstate": "^4.2.0",
     "pusher-js": "^8.4.0",
     "roboto-fontface": "*",
